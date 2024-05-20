@@ -19,10 +19,7 @@ func (k *Keeper) GetCount(ctx sdk.Context, key string) uint64 {
 		return 0
 	}
 
-	var res uint64
-	binary.BigEndian.PutUint64(bz, res)
-
-	return res
+	return binary.BigEndian.Uint64(bz)
 }
 
 func (k *Keeper) SetCount(ctx sdk.Context, key string, count uint64) {

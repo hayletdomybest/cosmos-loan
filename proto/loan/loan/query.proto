@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package loan.loan;
 
 import "amino/amino.proto";
@@ -6,25 +7,41 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "loan/loan/params.proto";
+import "loan/loan/loan.proto";
 
 option go_package = "loan/x/loan/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/loan/loan/params";
+  
+  }
+  
+  // Queries a list of GetAllLoan items.
+  rpc GetAllLoan (QueryGetAllLoanRequest) returns (QueryGetAllLoanResponse) {
+    option (google.api.http).get = "/loan/loan/get_all_loan";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
+
+message QueryGetAllLoanRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetAllLoanResponse {
+  repeated Loan                          loans      = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
