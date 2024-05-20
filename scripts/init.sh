@@ -11,8 +11,8 @@ CHAIN_ID=loan-1
 MONIKER=loan
 MIN_GAS_PRICE=0
 
-declare -a USERS=("james" "alice")
-declare -a USERS_ACCOUNT_TOKENS=("james" "100000000token1" "alice" "30000000token2")
+declare -a USERS=("james" "alice" "bob")
+declare -a USERS_ACCOUNT_TOKENS=("james" "100000000token1" "alice" "30000000token2" "bob" "100000000token1,30000000token2")
 declare -a STAKING_USERS_ACCOUNT_TOKENS=("james" "70000000token1")
 KEYRING=test
 
