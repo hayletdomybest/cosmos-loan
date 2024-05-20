@@ -21,6 +21,18 @@ const (
 	LoanApprovedValueKey = "loan/approved/value/"
 
 	LoanApprovedCountKey = "loan/approved/count/"
+
+	LoanCanceledValueKey = "loan/Canceled/value/"
+
+	LoanCanceledCountKey = "loan/Canceled/count/"
+
+	LoanCompletedValueKey = "loan/Completed/value/"
+
+	LoanCompletedCountKey = "loan/Completed/count/"
+
+	LoanLiquidatedValueKey = "loan/Liquidated/value/"
+
+	LoanLiquidatedCountKey = "loan/Liquidated/count/"
 )
 
 var (

@@ -7,7 +7,7 @@ IF_COLLECT_GENTXS=1
 CMD_HOME=./build/loand
 DENOM=token1
 CONFIG_HOME=./private/.loanapp
-CHAIN_ID=laon-1
+CHAIN_ID=loan-1
 MONIKER=loan
 MIN_GAS_PRICE=0
 
