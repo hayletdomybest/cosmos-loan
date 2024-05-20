@@ -9,6 +9,18 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_loan"
+
+	LoanAllValueKey = "loan/all/value/"
+
+	LoanAllCountKey = "loan/all/count/"
+
+	LoanPendingValueKey = "loan/pending/value/"
+
+	LoanPendingCountKey = "loan/pending/count/"
+
+	LoanApprovedValueKey = "loan/approved/value/"
+
+	LoanApprovedCountKey = "loan/approved/count/"
 )
 
 var (
