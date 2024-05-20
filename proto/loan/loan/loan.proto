@@ -1,0 +1,16 @@
+syntax = "proto3";
+package loan.loan;
+
+option go_package = "loan/x/loan/types";
+
+message Loan {
+  uint64 id     = 1;
+  string amount = 2; 
+  string collateral = 3; 
+  string apy = 4; 
+  uint64 borrowTime = 5; 
+  string state = 6; 
+  uint64 deadline = 7; 
+  string borrower = 8; 
+  string lender = 9; 
+}
