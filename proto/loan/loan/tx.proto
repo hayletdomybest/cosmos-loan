@@ -18,6 +18,7 @@ service Msg {
   // parameters. The authority defaults to the x/gov module account.
   rpc UpdateParams (MsgUpdateParams) returns (MsgUpdateParamsResponse);
   rpc CreateLoan   (MsgCreateLoan  ) returns (MsgCreateLoanResponse  );
+  rpc ApprovedLoan (MsgApprovedLoan) returns (MsgApprovedLoanResponse);
 }
 // MsgUpdateParams is the Msg/UpdateParams request type.
 message MsgUpdateParams {
@@ -48,5 +49,15 @@ message MsgCreateLoan {
 
 message MsgCreateLoanResponse {
   string loanId = 1;
+}
+
+message MsgApprovedLoan {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1;
+  string loanId  = 2;
+}
+
+message MsgApprovedLoanResponse {
+  string state = 1;
 }
 

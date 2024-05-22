@@ -48,6 +48,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a create-loan tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}, {ProtoField: "apy"}, {ProtoField: "collateral"}, {ProtoField: "borrowTime"}},
 				},
+				{
+					RpcMethod:      "ApprovedLoan",
+					Use:            "approved-loan [loan-id]",
+					Short:          "Send a approved-loan tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "loanId"}},
+				},
 				// this line is used by ignite scaffolding # autocli/tx
 			},
 		},

@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Msg_UpdateParams_FullMethodName = "/loan.loan.Msg/UpdateParams"
 	Msg_CreateLoan_FullMethodName   = "/loan.loan.Msg/CreateLoan"
+	Msg_ApprovedLoan_FullMethodName = "/loan.loan.Msg/ApprovedLoan"
 )
 
 // MsgClient is the client API for Msg service.
@@ -31,6 +32,7 @@ type MsgClient interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 	CreateLoan(ctx context.Context, in *MsgCreateLoan, opts ...grpc.CallOption) (*MsgCreateLoanResponse, error)
+	ApprovedLoan(ctx context.Context, in *MsgApprovedLoan, opts ...grpc.CallOption) (*MsgApprovedLoanResponse, error)
 }
 
 type msgClient struct {
@@ -59,6 +61,15 @@ func (c *msgClient) CreateLoan(ctx context.Context, in *MsgCreateLoan, opts ...g
 	return out, nil
 }
 
+func (c *msgClient) ApprovedLoan(ctx context.Context, in *MsgApprovedLoan, opts ...grpc.CallOption) (*MsgApprovedLoanResponse, error) {
+	out := new(MsgApprovedLoanResponse)
+	err := c.cc.Invoke(ctx, Msg_ApprovedLoan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility
@@ -67,6 +78,7 @@ type MsgServer interface {
 	// parameters. The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	CreateLoan(context.Context, *MsgCreateLoan) (*MsgCreateLoanResponse, error)
+	ApprovedLoan(context.Context, *MsgApprovedLoan) (*MsgApprovedLoanResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -79,6 +91,9 @@ func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*
 }
 func (UnimplementedMsgServer) CreateLoan(context.Context, *MsgCreateLoan) (*MsgCreateLoanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateLoan not implemented")
+}
+func (UnimplementedMsgServer) ApprovedLoan(context.Context, *MsgApprovedLoan) (*MsgApprovedLoanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApprovedLoan not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 
@@ -129,6 +144,24 @@ func _Msg_CreateLoan_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ApprovedLoan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgApprovedLoan)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ApprovedLoan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ApprovedLoan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ApprovedLoan(ctx, req.(*MsgApprovedLoan))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +176,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateLoan",
 			Handler:    _Msg_CreateLoan_Handler,
+		},
+		{
+			MethodName: "ApprovedLoan",
+			Handler:    _Msg_ApprovedLoan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
