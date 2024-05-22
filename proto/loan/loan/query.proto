@@ -25,6 +25,12 @@ service Query {
     option (google.api.http).get = "/loan/loan/get_all_loan";
   
   }
+  
+  // Queries a list of GetLoan items.
+  rpc GetLoan (QueryGetLoanRequest) returns (QueryGetLoanResponse) {
+    option (google.api.http).get = "/loan/loan/get_loan/{loanId}";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -41,7 +47,15 @@ message QueryGetAllLoanRequest {
 }
 
 message QueryGetAllLoanResponse {
-  repeated Loan                          loans      = 1 [(gogoproto.nullable) = false];
-  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  repeated Loan                                   loans      = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetLoanRequest {
+  string loanId = 1;
+}
+
+message QueryGetLoanResponse {
+  Loan loan = 1;
 }
 

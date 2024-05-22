@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Query_Params_FullMethodName     = "/loan.loan.Query/Params"
 	Query_GetAllLoan_FullMethodName = "/loan.loan.Query/GetAllLoan"
+	Query_GetLoan_FullMethodName    = "/loan.loan.Query/GetLoan"
 )
 
 // QueryClient is the client API for Query service.
@@ -31,6 +32,8 @@ type QueryClient interface {
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Queries a list of GetAllLoan items.
 	GetAllLoan(ctx context.Context, in *QueryGetAllLoanRequest, opts ...grpc.CallOption) (*QueryGetAllLoanResponse, error)
+	// Queries a list of GetLoan items.
+	GetLoan(ctx context.Context, in *QueryGetLoanRequest, opts ...grpc.CallOption) (*QueryGetLoanResponse, error)
 }
 
 type queryClient struct {
@@ -59,6 +62,15 @@ func (c *queryClient) GetAllLoan(ctx context.Context, in *QueryGetAllLoanRequest
 	return out, nil
 }
 
+func (c *queryClient) GetLoan(ctx context.Context, in *QueryGetLoanRequest, opts ...grpc.CallOption) (*QueryGetLoanResponse, error) {
+	out := new(QueryGetLoanResponse)
+	err := c.cc.Invoke(ctx, Query_GetLoan_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -67,6 +79,8 @@ type QueryServer interface {
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Queries a list of GetAllLoan items.
 	GetAllLoan(context.Context, *QueryGetAllLoanRequest) (*QueryGetAllLoanResponse, error)
+	// Queries a list of GetLoan items.
+	GetLoan(context.Context, *QueryGetLoanRequest) (*QueryGetLoanResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -79,6 +93,9 @@ func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*Q
 }
 func (UnimplementedQueryServer) GetAllLoan(context.Context, *QueryGetAllLoanRequest) (*QueryGetAllLoanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllLoan not implemented")
+}
+func (UnimplementedQueryServer) GetLoan(context.Context, *QueryGetLoanRequest) (*QueryGetLoanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLoan not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -129,6 +146,24 @@ func _Query_GetAllLoan_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_GetLoan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryGetLoanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetLoan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_GetLoan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetLoan(ctx, req.(*QueryGetLoanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -143,6 +178,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllLoan",
 			Handler:    _Query_GetAllLoan_Handler,
+		},
+		{
+			MethodName: "GetLoan",
+			Handler:    _Query_GetLoan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
