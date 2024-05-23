@@ -43,7 +43,8 @@ message QueryParamsResponse {
 }
 
 message QueryGetAllLoanRequest {
-  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  uint32 type = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryGetAllLoanResponse {

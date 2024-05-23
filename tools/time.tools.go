@@ -39,3 +39,8 @@ func ParseTime(input string, customFormats ...string) (time.Time, error) {
 
 	return time.Time{}, fmt.Errorf("unable to parse time input: %s", input)
 }
+
+func MustParseTime(input string, customFormats ...string) time.Time {
+	data, _ := ParseTime(input, customFormats...)
+	return data
+}

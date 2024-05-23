@@ -6,36 +6,34 @@ type LoanState int
 
 const (
 	// Define the enum values using iota
-	Pending LoanState = iota
-	Approved
-	Canceled
-	Completed
-	Liquidated
+	AllState LoanState = iota
+	PendingState
+	ApprovedState
+	CanceledState
+	LiquidatedState
 )
 
 // String method to convert LoanState to string
 func (s LoanState) String() string {
-	return [...]string{"Pending", "Approved", "Canceled", "Completed", "Liquidated"}[s]
+	return [...]string{"All", "Pending", "Approved", "Canceled", "Liquidated"}[s]
 }
 
 // String method to convert LoanState to string
-func (s LoanState) Keys() string {
-	return [...]string{LoanPendingCountKey, LoanApprovedCountKey, LoanCanceledCountKey, LoanCompletedCountKey, LoanLiquidatedCountKey}[s]
+func (s LoanState) Keys() LoanKeys {
+	return [...]LoanKeys{AllKeys, ApprovedKeys, CanceledKeys, LiquidatedKeys}[s]
 }
 
 // ParseLoanState converts a string to a LoanState enum value
 func ParseLoanState(state string) (LoanState, error) {
 	switch state {
 	case "Pending":
-		return Pending, nil
+		return PendingState, nil
 	case "Approved":
-		return Approved, nil
+		return ApprovedState, nil
 	case "Canceled":
-		return Canceled, nil
-	case "Completed":
-		return Completed, nil
+		return CanceledState, nil
 	case "Liquidated":
-		return Liquidated, nil
+		return LiquidatedState, nil
 	default:
 		return -1, fmt.Errorf("invalid loan state: %s", state)
 	}

@@ -19,9 +19,9 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod:      "GetAllLoan",
-					Use:            "get-all-loan",
+					Use:            "get-all-loan [type --- 0 all,1 pending,2 approved,3 canceled,4 liquidate]",
 					Short:          "Query get-all-loan",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{},
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "type"}},
 				},
 
 				{

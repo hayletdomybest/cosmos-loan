@@ -9,8 +9,6 @@ import (
 	"loan/x/loan/types"
 
 	errorsmod "cosmossdk.io/errors"
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"google.golang.org/grpc/codes"
@@ -20,31 +18,24 @@ import (
 func (k msgServer) CreateLoan(goCtx context.Context, msg *types.MsgCreateLoan) (*types.MsgCreateLoanResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	validateBasic(msg)
-	count := k.GetCount(ctx, types.LoanAllCountKey)
-	k.SetCount(ctx, types.LoanAllCountKey, count+1)
+	count := k.GetCount(ctx, types.AllKeys)
+
+	borrowCoin, _ := sdk.ParseCoinNormalized(msg.Amount)
+	collateralAmount := borrowCoin.Amount.Abs().Uint64() + 1
 
 	var loan types.Loan
 
 	tools.MapFields(msg, &loan)
 	loan.Id = count
+	loan.BorrowTime = msg.BorrowTime
 	loan.Borrower = msg.Creator
-	loan.State = types.Pending.String()
-	marshalLoan := k.cdc.MustMarshal(&loan)
+	loan.State = types.PendingState.String()
+	loan.Collateral = fmt.Sprintf("%d%s", collateralAmount, msg.Collateral)
 
-	count = k.GetCount(ctx, types.Pending.Keys())
-	k.SetCount(ctx, types.Pending.Keys(), count+1)
+	k.AddOrUpdateLoan(ctx, &loan, types.AllKeys)
+	k.AddOrUpdateLoan(ctx, &loan, types.PendingKeys)
 
-	adapter := runtime.KVStoreAdapter(k.storeService.OpenKVStore(ctx))
-	store := prefix.NewStore(adapter, types.KeyPrefix(types.LoanAllValueKey))
-	store.Set(tools.Uint64ToBinary(loan.Id), marshalLoan)
-
-	store = prefix.NewStore(adapter, types.KeyPrefix(types.LoanPendingValueKey))
-	store.Set(tools.Uint64ToBinary(loan.Id), marshalLoan)
-
-	borrowCoin, _ := sdk.ParseCoinNormalized(msg.Amount)
-	collateralAmount := borrowCoin.Amount.Abs().Uint64() + 1
-	collateral, _ := sdk.ParseCoinNormalized(fmt.Sprintf("%d%s", collateralAmount, msg.Collateral))
-
+	collateral, _ := sdk.ParseCoinNormalized(loan.Collateral)
 	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Creator), types.ModuleName, sdk.NewCoins(collateral)); err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
